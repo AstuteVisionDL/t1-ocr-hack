@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "t1hackaton"
+version = "0.1.0"
+description = ""
+authors = ["arkadiy <arkadiy@everypixel.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+opencv-python = "^4.10.0.84"
+fastapi = "^0.115.3"
+surya-ocr = "^0.6.10"
+matplotlib = "^3.9.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

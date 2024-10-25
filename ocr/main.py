@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+
 import cv2
 
 from PIL import Image
@@ -24,37 +27,35 @@ def process_single_image(image_path: str) -> list[OCRResult]:
     return predictions
 
 
-def visualize_predictions(image_path: str, predictions: list[OCRResult]):
-    # Read the image using OpenCV
+def visualize_predictions(image_path: str, predictions: list[OCRResult], save_path: Path | None = None):
     image = cv2.imread(image_path)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert from BGR to RGB for matplotlib
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-    # Create a figure for visualization
     plt.figure(figsize=(12, 8))
     plt.imshow(image)
 
-    # Overlay predictions
     for prediction in predictions:
         for text_line in prediction.text_lines:
-            # Draw the bounding box
             x_coords = text_line.bbox[0::2]  # x coordinates
             y_coords = text_line.bbox[1::2]  # y coordinates
             points = list(zip(x_coords, y_coords))
             cv2.polylines(image, [np.array(points, dtype=np.int32)], isClosed=True, color=(255, 0, 0), thickness=2)
 
-            # Display text and confidence
             text_display = f"{text_line.text} ({text_line.confidence:.2f})" if text_line.confidence else text_line.text
-            # Place the text above the bounding box
             plt.text(x_coords[0], y_coords[0] - 10, text_display, color='blue', fontsize=12, weight='bold')
 
-    # Display the image with predictions
     plt.axis('off')
     plt.title('OCR Predictions', fontsize=16)
-    plt.show()
 
+    if save_path:
+        plt.savefig(save_path, bbox_inches='tight', pad_inches=0.1)
+    else:
+        plt.show()
 
 
 if __name__ == '__main__':
-    image_path = "/home/ark/PycharmProjects/t1hackaton/ocr/data/sample1.jpg"
-    results = process_single_image(image_path)
-    visualize_predictions(image_path, results)
+    os.makedirs("results", exist_ok=True)
+    for image_path in os.listdir("ocr/data"):
+        image_path = os.path.join("ocr/data", image_path)
+        results = process_single_image(image_path)
+        visualize_predictions(image_path, results, save_path=Path("results") / Path(image_path).stem)

@@ -1,6 +1,6 @@
 services:
   frontend:
-    container_name: frontend-ocr
+    container_name: frontend-models
     network_mode: "host"
     depends_on:
       - backend

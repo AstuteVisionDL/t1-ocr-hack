@@ -1,4 +1,7 @@
-def run_ocr_pipeline_on_image(image_path: str) -> list[dict]:
+from PIL.Image import Image
+
+
+def run_ocr_pipeline_on_image(image: Image) -> list[dict]:
     return [{'signature': False, 'content': 'Служба',
              'coordinates': [[24.064699391423503, 31.483796701294516], [34.24125844122839, 36.79483710826857]]},
             {'signature': False, 'content': 'Служба',

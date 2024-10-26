@@ -6,19 +6,19 @@ from surya.ocr import run_ocr
 from surya.schema import OCRResult
 
 
-def run_ocr_pipeline_on_image(image_path: str) -> list[dict]:
-    surya_preds = process_single_image(image_path)
-    return [{'signature': False, 'content': text_line.text, 'coordinates': [[text_line.bbox[0], text_line.bbox[1]], [text_line.bbox[2], text_line.bbox[3]]]} for prediction in surya_preds for text_line in prediction.text_lines]
+def run_ocr_pipeline_on_image(image) -> list[dict]:
+    surya_preds = process_single_image(image)
+    return [{'signature': False, 'content': text_line.text,
+             'coordinates': [[text_line.bbox[0], text_line.bbox[1]], [text_line.bbox[2], text_line.bbox[3]]]} for
+            prediction in surya_preds for text_line in prediction.text_lines]
 
 
-def process_single_image(image_path: str) -> list[OCRResult]:
+def process_single_image(image: Image) -> list[OCRResult]:
     """
     Main function of OCR application
     :param image: image with sheet of paper
     :return: text on the image
     """
-    image = Image.open(image_path)
-
     langs = ["ru"]
     det_processor, det_model = load_det_processor(), load_det_model()
     rec_model, rec_processor = load_rec_model(), load_rec_processor()

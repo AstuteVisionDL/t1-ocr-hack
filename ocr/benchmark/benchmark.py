@@ -1,5 +1,6 @@
 import os
 import cv2
+from PIL import Image
 
 from ocr.benchmark.annotations import load_annotation
 from ocr.benchmark.matching import match_predictions_to_ground_truth
@@ -9,14 +10,12 @@ from ocr.benchmark.metrics import (
     object_detection_metrics,
     signature_classification_accuracy,
 )
-from ocr.models.surya_version import run_ocr_pipeline_on_image
+from ocr.models.trocr_version import run_ocr_pipeline_on_image
 
 
 def visualize_bounding_boxes(image_path, ground_truth, predictions, output_path):
-    # Load the image
     image = cv2.imread(image_path)
 
-    # Draw ground truth bounding boxes in green
     for gt in ground_truth:
         x1y1, x2y2 = gt['coordinates']
         x1, y1 = x1y1
@@ -27,7 +26,6 @@ def visualize_bounding_boxes(image_path, ground_truth, predictions, output_path)
         y2 = int(y2)
         cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)  # Green box
 
-    # Draw predicted bounding boxes in red
     for pred in predictions:
         x1y1, x2y2 = pred['coordinates']
         x1, y1 = x1y1
@@ -38,13 +36,14 @@ def visualize_bounding_boxes(image_path, ground_truth, predictions, output_path)
         y2 = int(y2)
         cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 255), 2)  # Red box
 
-    # Save the image with bounding boxes
     cv2.imwrite(output_path, image)
 
 
 def run_benchmark(ground_truth, predictions, image_path, debug_folder):
+    print(image_path)
     # Perform matching
     matches, unmatched_gt, unmatched_pred = match_predictions_to_ground_truth(ground_truth, predictions)
+    print(matches)
 
     # Initialize accumulators
     char_accuracies = []
@@ -100,7 +99,6 @@ def run_benchmark_for_full_dataset(dataset_path: str):
     debug_folder = os.path.join(dataset_path, "debug")
     os.makedirs(debug_folder, exist_ok=True)
 
-    # Initialize accumulators for overall metrics
     all_char_accuracies = []
     all_word_accuracies = []
     total_precision = 0
@@ -117,14 +115,14 @@ def run_benchmark_for_full_dataset(dataset_path: str):
         )
 
         ground_truth = load_annotation(annotation_path)
-        predictions = run_ocr_pipeline_on_image(image_path)
 
-        # Run benchmark and visualize results
+        image = Image.open(image_path)
+        predictions = run_ocr_pipeline_on_image(image)
+
         char_acc_list, word_acc_list, precision, recall, f1_score, signature_acc = run_benchmark(
             ground_truth, predictions, image_path, debug_folder
         )
 
-        # Accumulate metrics
         all_char_accuracies.extend(char_acc_list)
         all_word_accuracies.extend(word_acc_list)
         total_precision += precision
@@ -133,7 +131,6 @@ def run_benchmark_for_full_dataset(dataset_path: str):
         total_signature_accuracy += signature_acc
         num_images += 1
 
-    # Compute overall average metrics
     if num_images > 0:
         overall_char_accuracy = sum(all_char_accuracies) / len(all_char_accuracies) if all_char_accuracies else 0
         overall_word_accuracy = sum(all_word_accuracies) / len(all_word_accuracies) if all_word_accuracies else 0
@@ -149,7 +146,6 @@ def run_benchmark_for_full_dataset(dataset_path: str):
         overall_f1_score = 0
         overall_signature_accuracy = 0
 
-    # Output overall metrics
     print("Overall Metrics:")
     print(f"Average Character-level Accuracy: {overall_char_accuracy:.2f}")
     print(f"Average Word-level Accuracy: {overall_word_accuracy:.2f}")

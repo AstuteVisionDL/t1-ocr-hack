@@ -13,6 +13,8 @@ def run_ocr_pipeline_on_image(image: Image.Image) -> list[dict]:
 
     for recognition_result, detection_result in zip(recognition, detections[0].bboxes):
         content = recognition_result[0]["generated_text"]
+        if content.isupper():
+            continue
         bbox = detection_result.bbox
         result_list.append({
             "signature": False,

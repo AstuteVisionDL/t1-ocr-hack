@@ -9,7 +9,7 @@ export interface DocumentResponse {
     signature: boolean;
 }
 
-const API_URL = 'http://localhost/upload-document/'; // Change this to your FastAPI server URL
+const API_URL = 'http://127.0.0.1:8000/upload-document/'; // Change this to your FastAPI server URL
 
 export const uploadDocument = async (file: File): Promise<DocumentResponse[]> => {
     const formData = new FormData();

@@ -1,4 +1,4 @@
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDisclosure } from '@mantine/hooks';
 import { AppShell, Burger } from '@mantine/core';
@@ -54,7 +54,7 @@ const MainLayout: FC<{ children: ReactNode }> = ({ children }) => {
           />
 
           {
-            !!agent ?
+            agent ?
               <>
                 <TopMenu>
                   {Object.entries(navConfig).map(([path, name]) => (

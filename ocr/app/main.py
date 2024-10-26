@@ -1,10 +1,21 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["Content-Disposition"],
+)
 
-class DocumentResponse:
+
+class DocumentResponse(BaseModel):
     coordinates: list[list[int]]
     content: str
     language: str

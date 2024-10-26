@@ -32,9 +32,7 @@ RUN apt-get update && \
     build-essential \
     curl \
     software-properties-common \
-    git && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    git
 
 # Install Poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
@@ -47,6 +45,8 @@ RUN poetry install --no-root --only main
 
 FROM requirement_install as production
 WORKDIR /app
+
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
 COPY ./prestart.sh /app/prestart.sh
 COPY . .

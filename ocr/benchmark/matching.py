@@ -1,4 +1,4 @@
-from benchmark.metrics import calculate_iou
+from ocr.benchmark.metrics import calculate_iou
 
 
 def match_predictions_to_ground_truth(ground_truth, predictions, iou_threshold=0.1):

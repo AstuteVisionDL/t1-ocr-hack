@@ -3,7 +3,7 @@ from surya.detection import batch_text_detection
 from surya.input.processing import convert_if_not_rgb, slice_polys_from_image
 from surya.model.detection.model import load_model as load_det_model, load_processor as load_det_processor
 
-from ocr.models.recognition_models.tr_ocr_recognition import run_recognition_tr_ocr
+from models.recognition_models.tr_ocr_recognition import run_recognition_tr_ocr
 
 
 def run_ocr_pipeline_on_image(image: Image.Image) -> list[dict]:

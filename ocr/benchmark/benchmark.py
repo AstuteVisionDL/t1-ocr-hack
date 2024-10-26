@@ -2,15 +2,15 @@ import os
 import cv2
 from PIL import Image
 
-from ocr.benchmark.annotations import load_annotation
-from ocr.benchmark.matching import match_predictions_to_ground_truth
-from ocr.benchmark.metrics import (
+from benchmark.annotations import load_annotation
+from benchmark.matching import match_predictions_to_ground_truth
+from benchmark.metrics import (
     character_level_accuracy,
     word_level_accuracy,
     object_detection_metrics,
     signature_classification_accuracy,
 )
-from ocr.models.trocr_version import run_ocr_pipeline_on_image
+from models.trocr_version import run_ocr_pipeline_on_image
 
 
 def visualize_bounding_boxes(image_path, ground_truth, predictions, output_path):

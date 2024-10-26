@@ -7,7 +7,7 @@ import registerInstanceName from '../routes/auth/Register/instanceName';
 import documentInstanceName from '../routes/document/instanceName';
 
 const routesConfig = {
-  '/': Login,
+  '/': Document,
   [loginInstanceName]: Login,
   [registerInstanceName]: Register,
   [documentInstanceName]: Document

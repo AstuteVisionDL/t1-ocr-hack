@@ -1,6 +1,7 @@
 services:
   frontend:
     container_name: frontend-models
+    network_mode: "host"
     depends_on:
       - backend
     build:
@@ -10,6 +11,8 @@ services:
     restart: always
 
   backend:
+    container_name: backend-models
+    network_mode: "host"
     restart: always
     expose:
       - "80"

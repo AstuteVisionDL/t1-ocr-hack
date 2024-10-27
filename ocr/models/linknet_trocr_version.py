@@ -2,9 +2,9 @@ import PIL.Image
 import numpy as np
 from PIL import Image
 
-from ocr.common.handwritten_text_classification import is_handwritten
-from ocr.models.linknet_models.predictor import PipelinePredictor, get_upscaled_bbox
-from ocr.models.recognition_models.tr_ocr_recognition import run_recognition_tr_ocr
+from common.handwritten_text_classification import is_handwritten
+from models.linknet_models.predictor import PipelinePredictor, get_upscaled_bbox
+from models.recognition_models.tr_ocr_recognition import run_recognition_tr_ocr
 
 
 PIPELINE_CONFIG_PATH = "models/linknet_models/pipeline_config.json"
@@ -21,7 +21,7 @@ def run_ocr_pipeline_on_image(image: Image.Image) -> list[dict]:
         content = recognition_result[0]["generated_text"]
         word_crop = word_images[i]
         i += 1
-        #if not is_handwritten(word_crop, content):
+        # if not is_handwritten(word_crop, content):
         #     continue
         if len(content.split()) > 1:
             content = max(content.split(), key=len)

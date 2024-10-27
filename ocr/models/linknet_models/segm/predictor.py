@@ -5,16 +5,16 @@ import cv2
 import numpy as np
 
 
-from ocr.models.linknet_models.segm.transforms import InferenceTransform
-from ocr.models.linknet_models.segm.models import LinkResNet
-from ocr.models.linknet_models.segm.config import Config
+from models.linknet_models.segm.transforms import InferenceTransform
+from models.linknet_models.segm.models import LinkResNet
+from models.linknet_models.segm.config import Config
 
 
 def predict(images, model, device, targets=None):
     """Make model prediction.
     Args:
         images (torch.Tensor): Batch with tensor images.
-        model (ocr.src.models.CRNN): OCR model.
+        model (src.models.CRNN): OCR model.
         device (torch.device): Torch device.
         targets (torch.Tensor): Batch with tensor masks. By default is None.
     """

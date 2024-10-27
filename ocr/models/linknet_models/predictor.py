@@ -4,10 +4,10 @@ import numpy as np
 import pyclipper
 from shapely.geometry import Polygon
 
-from ocr.models.linknet_models.segm.predictor import SegmPredictor
+from models.linknet_models.segm.predictor import SegmPredictor
 
-from ocr.models.linknet_models.utils import img_crop
-from ocr.models.linknet_models.config import Config
+from models.linknet_models.utils import img_crop
+from models.linknet_models.config import Config
 
 
 

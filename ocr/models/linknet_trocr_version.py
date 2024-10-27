@@ -21,8 +21,8 @@ def run_ocr_pipeline_on_image(image: Image.Image) -> list[dict]:
         content = recognition_result[0]["generated_text"]
         word_crop = word_images[i]
         i += 1
-        if not is_handwritten(word_crop, content):
-            continue
+        #if not is_handwritten(word_crop, content):
+        #     continue
         if len(content.split()) > 1:
             content = max(content.split(), key=len)
         result_list.append({

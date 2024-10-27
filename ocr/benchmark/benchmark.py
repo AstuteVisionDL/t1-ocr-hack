@@ -43,8 +43,7 @@ def run_benchmark(ground_truth, predictions, image_path, debug_folder):
     print(image_path)
     # Perform matching
     matches, unmatched_gt, unmatched_pred = match_predictions_to_ground_truth(ground_truth, predictions)
-    print(matches)
-
+    print([(m['gt']['content'], m['pred']['content']) for m in matches])
     # Initialize accumulators
     char_accuracies = []
     word_accuracies = []

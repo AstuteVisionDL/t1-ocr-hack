@@ -1,53 +1,38 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.10-slim as python-base
+FROM nvidia/cuda:11.4.3-devel-ubuntu20.04
 
-# - python
-ENV PYTHONUNBUFFERED=1 \
-    # prevents python creating .pyc files
-    PYTHONDONTWRITEBYTECODE=1 \
-    # - pip
-    PIP_NO_CACHE_DIR=off \
-    PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100 \
-    # - poetry
-    # make poetry install to this location
-    POETRY_HOME="/opt/poetry" \
-    # make poetry create the virtual environment in the project's root
-    # it gets named `.venv`
-    POETRY_VIRTUALENVS_IN_PROJECT=true \
-    # do not ask any interactive question
-    POETRY_NO_INTERACTION=1 \
-    POETRY_REQUESTS_TIMEOUT=100 \
-    # - paths
-    # this is where our requirements + virtual environment will live
-    PYSETUP_PATH="/opt/pysetup" \
-    VENV_PATH="/opt/pysetup/.venv"
+ENV DEBIAN_FRONTEND noninteractive
 
+RUN apt-get update &&\
+    apt-get -y install \
+    build-essential yasm nasm cmake \
+    git htop tmux \
+    python3 python3-pip python3-dev python3-setuptools python3-opencv tesseract-ocr &&\
+    ln -s /usr/bin/python3 /usr/bin/python &&\
+    ln -sf /usr/bin/pip3 /usr/bin/pip &&\
+    apt-get clean &&\
+    apt-get autoremove &&\
+    rm -rf /var/lib/apt/lists/* &&\
+    rm -rf /var/cache/apt/archives/*
 
-# Prepend poetry and venv to PATH
-ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
+# Upgrade pip for cv package instalation
+RUN pip3 install --upgrade pip==21.0.1
 
-# Install system dependencies
-RUN apt-get update && \
-    apt-get install -y \
-    build-essential \
-    curl \
-    software-properties-common \
-    git
+# Install PyTorch
+RUN pip3 install --no-cache-dir \
+    torch==1.9.0+cu111 \
+    torchvision==0.10.0+cu111 \
+    -f https://download.pytorch.org/whl/torch_stable.html
 
-# Install Poetry
-RUN curl -sSL https://install.python-poetry.org | python3 -
+ENV PYTHONPATH $PYTHONPATH:/workdir
+ENV TORCH_HOME=/workdir/data/.torch
+ENV LANG C.UTF-8
 
-FROM python-base as requirement_install
-WORKDIR $PYSETUP_PATH
-COPY ./poetry.lock ./pyproject.toml ./
-RUN poetry config virtualenvs.create false
-RUN poetry install --no-root --only main
+WORKDIR /workdir
 
-FROM requirement_install as production
-WORKDIR /app
+# Install python ML packages
+COPY requirements.txt /workdir
+RUN pip3 install --no-cache-dir -r requirements.txt
 
-RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
+# COPY . ocr/
 
-COPY ./prestart.sh /app/prestart.sh
-COPY . .
-EXPOSE 80
+# CMD python3 api.py

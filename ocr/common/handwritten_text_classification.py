@@ -1,7 +1,9 @@
 import cv2
-import numpy as np
 from collections import Counter
+
+import numpy as np
 import pytesseract
+
 
 def jaccard_similarity(word1, word2):
     word1, word2 = word1.lower(), word2.lower()
@@ -35,6 +37,7 @@ def is_handwritten(image, true_text: str):
     # Convert image to grayscale
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
+    image = np.array(image)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     custom_config = r'--oem 3 --psm 6'

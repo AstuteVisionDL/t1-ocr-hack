@@ -16,10 +16,15 @@ def run_ocr_pipeline_on_image(image: Image.Image) -> list[dict]:
     recognition = run_recognition_tr_ocr(word_images)
     result_list = []
 
+    i = 0
     for recognition_result, bbox in zip(recognition, bboxes):
         content = recognition_result[0]["generated_text"]
-        if content.isupper():
+        word_crop = word_images[i]
+        i += 1
+        if not is_handwritten(word_crop, content):
             continue
+        if len(content.split()) > 1:
+            content = max(content.split(), key=len)
         result_list.append({
             "signature": False,
             "content": content,
@@ -41,8 +46,6 @@ def detect_with_linknet(image: Image.Image):
     bboxes = []
     for p in pred_data['predictions']:
         if 'crop' not in p or p['crop'] is None:
-            continue
-        if not is_handwritten(p['crop']):
             continue
         words.append(PIL.Image.fromarray(p['crop']))
         bbox = get_upscaled_bbox(p['bbox'], 1.1, 2.3)

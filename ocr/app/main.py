@@ -28,12 +28,13 @@ class DocumentResponse(BaseModel):
 
 
 @app.post("/upload-document/", response_model=list[DocumentResponse])
-async def upload_document(file: UploadFile = File(...)):
+async def upload_document(file: UploadFile = File(...),
+                          all: bool = Query(False)):
     response_data = []
     contents = await file.read()
 
     image = Image.open(io.BytesIO(contents))
-    result = run_ocr_pipeline_on_image(image)
+    result = run_ocr_pipeline_on_image(image, all)
     return JSONResponse(content=result)
 
 

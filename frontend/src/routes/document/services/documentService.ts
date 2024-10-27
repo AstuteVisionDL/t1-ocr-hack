@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 
 // Define types for the response
@@ -11,7 +10,7 @@ export interface DocumentResponse {
 
 const API_URL = 'http://127.0.0.1:8000/upload-document/'; // Change this to your FastAPI server URL
 
-export const uploadDocument = async (file: File): Promise<DocumentResponse[]> => {
+export const uploadDocument = async (file: File, all: boolean = false): Promise<DocumentResponse[]> => {
     const formData = new FormData();
     formData.append('file', file);
 
@@ -20,6 +19,7 @@ export const uploadDocument = async (file: File): Promise<DocumentResponse[]> =>
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
+            params: { all }, // Добавляем параметр all в запрос
         });
         return response.data; // Return the response data
     } catch (error) {

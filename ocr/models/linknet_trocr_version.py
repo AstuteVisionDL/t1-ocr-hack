@@ -11,7 +11,7 @@ PIPELINE_CONFIG_PATH = "models/linknet_models/pipeline_config.json"
 predictor = PipelinePredictor(pipeline_config_path=PIPELINE_CONFIG_PATH)
 
 
-def run_ocr_pipeline_on_image(image: Image.Image) -> list[dict]:
+def run_ocr_pipeline_on_image(image: Image.Image, all: boolean) -> list[dict]:
     word_images, bboxes = detect_with_linknet(image)
     recognition = run_recognition_tr_ocr(word_images)
     result_list = []
@@ -21,8 +21,8 @@ def run_ocr_pipeline_on_image(image: Image.Image) -> list[dict]:
         content = recognition_result[0]["generated_text"]
         word_crop = word_images[i]
         i += 1
-        # if not is_handwritten(word_crop, content):
-        #     continue
+        if not is_handwritten(word_crop, content) and not all:
+            continue
         if len(content.split()) > 1:
             content = max(content.split(), key=len)
         result_list.append({

@@ -21,6 +21,7 @@ MAX_WORKERS=1 docker compose up
 curl -X POST "http://localhost/upload-document/"      -H "accept: application/json"      -H "Content-Type: multipart/form-data"      -F "file=@/home/user/0_kop_0.png"
 ```
 Где /home/user/0_kop_0.png можно заменить на путь до вашего файла 
+http://localhost - адрес бэкенда
 
 ## Альтернатива запуска для дебага (если не работает docker compose up)
 

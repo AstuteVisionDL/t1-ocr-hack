@@ -12,6 +12,10 @@ surya-ocr = "^0.6.10"
 matplotlib = "^3.9.2"
 uvicorn = "^0.32.0"
 python-multipart = "^0.0.12"
+shapely = "^2.0.6"
+pyclipper = "^1.3.0.post6"
+scikit-learn = "^1.5.2"
+albumentations = "^1.4.20"
 
 
 [build-system]

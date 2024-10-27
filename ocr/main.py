@@ -19,6 +19,8 @@ def process_single_image(image_path: str) -> list[OCRResult]:
     :param image: image with sheet of paper
     :return: text on the image
     """
+
+    print(image_path)
     image = Image.open(image_path)
 
     langs = ["ru"]
@@ -64,8 +66,8 @@ def save_cropped_words(predictions: list[OCRResult], image_path: str, save_path:
 if __name__ == '__main__':
     os.makedirs("results", exist_ok=True)
     os.makedirs("words", exist_ok=True)
-    for image_path in os.listdir("ocr/data"):
-        image_path = os.path.join("ocr/data", image_path)
+    for image_path in os.listdir("ocrpipeline/ocr/data/images"):
+        image_path = os.path.join("ocrpipeline/ocr/data/images", image_path)
         results = process_single_image(image_path)
         visualize_predictions(image_path, results, save_path=Path("results") / Path(image_path).stem)
         save_cropped_words(results, image_path, save_path=Path("words") / Path(image_path).stem)

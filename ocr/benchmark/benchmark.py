@@ -10,7 +10,7 @@ from ocr.benchmark.metrics import (
     object_detection_metrics,
     signature_classification_accuracy,
 )
-from ocr.models.trocr_version import run_ocr_pipeline_on_image
+from ocr.models.linknet_trocr_version import run_ocr_pipeline_on_image
 
 
 def visualize_bounding_boxes(image_path, ground_truth, predictions, output_path):
@@ -156,4 +156,4 @@ def run_benchmark_for_full_dataset(dataset_path: str):
 
 
 if __name__ == '__main__':
-    run_benchmark_for_full_dataset("ocr/data")
+    run_benchmark_for_full_dataset("data")

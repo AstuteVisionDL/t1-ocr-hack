@@ -1,0 +1,30 @@
+{   "main_process": {
+        "ImageToBGR": {
+            "input_format": "BGR"
+        },
+        "SegmPrediction": {
+            "model_path": "models/linknet_models/segm/segm_model.ckpt",
+            "config_path": "models/linknet_models/segm/segm_config.json",
+            "num_threads": 8,
+            "device": "cuda",
+            "runtime": "Pytorch"
+        },
+        "RestoreImageAngle": {
+            "restoring_class_names": ["text_line"]
+        },
+        "ClassContourPosptrocess": {},
+        "PrepareJSON": {}
+    },
+    "classes": {
+        "shrinked_text": {
+            "contour_posptrocess": {
+                "BboxFromContour": {},
+                "UpscaleBbox": {"upscale_bbox": [1.4, 2.3]},
+                "CropByBbox": {}
+            }
+        },
+        "text_line": {
+            "contour_posptrocess": {}
+        }
+    }
+}

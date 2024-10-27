@@ -50,4 +50,6 @@ RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
 COPY ./prestart.sh /app/prestart.sh
 COPY . .
+
+RUN pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu121
 EXPOSE 80

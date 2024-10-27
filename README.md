@@ -33,7 +33,7 @@ pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu12
 python app/main.py
 ```
 
-P.S. be sure that your Cuda version is compatible wit
+P.S. Index url должен соответствовать версии CUDA на устройстве
 
 Фронтенд
 ```shell

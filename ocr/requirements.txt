@@ -1,15 +1,9 @@
 opencv-python==4.10.0.84
 fastapi==0.115.3
-surya-ocr
-matplotlib==3.9.2
 uvicorn==0.32.0
 python-multipart==0.0.12
 shapely==2.0.6
 pyclipper==1.3.0.post6
-scikit-learn==1.5.2
-albumentations==1.4.20
+scikit-learn
+albumentations
 pytesseract==0.3.13
---extra-index-url https://download.pytorch.org/whl/cu121
-torch
---extra-index-url https://download.pytorch.org/whl/cu121
-torchvision

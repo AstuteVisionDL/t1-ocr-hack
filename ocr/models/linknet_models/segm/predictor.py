@@ -1,5 +1,4 @@
 import torch
-import onnxruntime as ort
 from enum import Enum
 
 import cv2
@@ -81,34 +80,6 @@ def get_preds(images, preds, cls2params, config, cuda_torch_input=True):
     return pred_data
 
 
-class SegmONNXCPUModel(SegmModel):
-    def __init__(self, model_path, num_threads, config_path):
-        self.config = Config(config_path)
-        self.cls2params = self.config.get_classes()
-        sess = ort.SessionOptions()
-        sess.intra_op_num_threads = num_threads
-        sess.inter_op_num_threads = num_threads
-        self.model = ort.InferenceSession(model_path, sess)
-        self.transforms = InferenceTransform(
-            height=self.config.get_image('height'),
-            width=self.config.get_image('width'),
-            return_numpy=True
-        )
-
-    def predict(self, images):
-        transformed_images = self.transforms(images)
-        output = self.model.run(
-            None,
-            {"input": transformed_images},
-        )[0]
-        return output
-
-    def get_preds(self, images, preds):
-        pred_data = get_preds(
-            images, preds, self.cls2params, self.config, False)
-        return pred_data
-
-
 class SegmTorchModel(SegmModel):
     def __init__(self, model_path, config_path, device='cuda'):
         self.config = Config(config_path)
@@ -171,17 +142,6 @@ class SegmPredictor:
         validate_value_in_enum(runtime, RuntimeType)
         if RuntimeType(runtime) is RuntimeType.TORCH:
             self.model = SegmTorchModel(model_path, config_path, device)
-        elif (
-            RuntimeType(runtime) is RuntimeType.ONNX
-            and device == 'cpu'
-        ):
-            self.model = SegmONNXCPUModel(model_path, num_threads, config_path)
-        elif (
-            RuntimeType(runtime) is RuntimeType.OVINO
-            and device == 'cpu'
-        ):
-            self.model = SegmOpenVINOCPUModel(
-                model_path, num_threads, config_path)
         else:
             raise Exception(f"Runtime type {runtime} with device {device} "
                             "are not supported options.")

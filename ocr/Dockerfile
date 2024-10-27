@@ -33,6 +33,8 @@ WORKDIR /workdir
 COPY requirements.txt /workdir
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# COPY . ocr/
+COPY . ocr/
 
-# CMD python3 api.py
+RUN pip3 install transformers
+
+CMD python ocr/app/main.py

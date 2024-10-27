@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 import io
 from PIL import Image
-from ocr.models.surya_version import run_ocr_pipeline_on_image
+from ocr.models.linknet_trocr_version import run_ocr_pipeline_on_image
 
 
 app = FastAPI()

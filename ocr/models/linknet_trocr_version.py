@@ -1,6 +1,8 @@
 import PIL.Image
 import numpy as np
 from PIL import Image
+
+from ocr.common.handwritten_text_classification import is_handwritten
 from ocr.models.linknet_models.predictor import PipelinePredictor, get_upscaled_bbox
 from ocr.models.recognition_models.tr_ocr_recognition import run_recognition_tr_ocr
 
@@ -40,8 +42,10 @@ def detect_with_linknet(image: Image.Image):
     for p in pred_data['predictions']:
         if 'crop' not in p or p['crop'] is None:
             continue
+        if not is_handwritten(p['crop']):
+            continue
         words.append(PIL.Image.fromarray(p['crop']))
-        bbox = get_upscaled_bbox(p['bbox'], 1.2, 2.3)
+        bbox = get_upscaled_bbox(p['bbox'], 1.1, 2.3)
         bboxes.append(bbox)
     return words, bboxes
 

@@ -2,6 +2,11 @@
 
 ## Как запустить сервис
 
+Clone repository (with git lfs)
+```
+git clone 
+```
+
 ```shell
 docker-compose up
 ```

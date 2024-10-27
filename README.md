@@ -8,7 +8,7 @@ git clone
 ```
 
 ```shell
-docker-compose up
+MAX_WORKERS=1 docker compose up
 ```
 Фронтенд откроётся по ссылке http://localhost:5173/
 Бэкенд доступен по ссылке http://localhost/
